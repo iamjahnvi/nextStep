@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
         required : true,
         minlength : 0,
     } ,
+
     // point to be noted is that password never stores the plain text password written by us, it stores the value of it , after hashing.
     // name , email and password are authentication information
 
@@ -30,7 +31,6 @@ const userSchema = new mongoose.Schema({
         } ,
         educationLevel : {
             type : Number ,
-            required : true ,
         },
         percentage : {
             type : Number ,
@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
         stream: {
             type : String
         },
-        subject : [
+        subjects : [
             {
                 type : String
             },
