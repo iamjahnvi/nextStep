@@ -58,5 +58,5 @@ const recommendExams = async(req , res) => {
 };
 
 module.exports = {
-    reccomendExams ,
+    recommendExams ,
 };
