@@ -8,7 +8,7 @@ const {signup , login , getMe} = require("../controllers/authController");
 
 const router = express.Router();
 
-const protect = require("../middleware/authMiddleware")
+const {protect} = require("../middleware/authMiddleware")
 
 router.post("/signup" , signup);
 
