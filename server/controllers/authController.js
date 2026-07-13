@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 
@@ -15,12 +14,24 @@ const signup = async (req , res) => {
     // this was something that we had written for testing it on POSTMAN
 
     try{
-        const{name , email , password } = req.body;
-        if(!name || !password || !email){
+        const{name , email , password , confirmPassword } = req.body;
+        if(!name || !password || !email || !confirmPassword){
             return res.status(400).json({
                 success : false ,
-                message : "All fields are required" ,
+                errors : {
+                    name : !name ? "Name is required" : null ,
+                    email : !email ? "Email is required" : null ,
+                    password : !password ? "Password is required" : null ,
+                    confirmPassword : !confirmPassword ? "Password is required" : null
+                }
             });
+        }
+
+        if(password.trim() != confirmPassword.trim()){
+            return res.status(400).json({
+                success : false , 
+                message :  "Passwords don't match"
+            })
         }
 
         const existingUser = await User.findOne({email});
@@ -38,10 +49,9 @@ const signup = async (req , res) => {
         if(existingUser){
             return res.status(409).json({
                 success : false ,
-                message : "Email already exits"
+                message : "Email already exists"
             })
         }
-
         const hashedPassword = await bcrypt.hash(password,10);
 
 
@@ -125,13 +135,14 @@ const login = async (req,res) => {
         const token = generateToken(user._id);
 
         return res.status(200).json({
-            sucess : true ,
+            success : true ,
             message : "login successful",
             token,
             user : {
                 id : user._id,
                 name : user.name ,
                 email : user.email ,
+
             } ,
         });
 
@@ -147,10 +158,70 @@ const login = async (req,res) => {
 
     };
 }
+const updateProfile = async(req , res) => {
+    try {
+        const {
+            age,
+            educationLevel ,
+            stream ,
+            subjects ,
+            percentage ,
+        } = req.body;
+
+        if(!req.user.profile) {
+            req.user.profile = {};
+        }
+
+        if(age!==undefined){
+            req.user.age = age;
+        }
+
+        if(stream!==undefined){
+            req.user.stream = stream;
+        }
+
+        if(educationLevel!==undefined){
+            req.user.educationLevel = educationLevel;
+        }
+
+        if(subjects!==undefined){
+            req.user.subjects = subjects;
+        }
+
+        if(percentage!==undefined){
+            req.user.percentage = percentage;
+        }
+
+        await req.user.save();
+
+        return res.status(200).json({
+            success : true ,
+            message : "Profile updated successfully" ,
+            user : {
+                id: req.user._id,
+                name: req.user.name,
+                email: req.user.email,
+                age: req.user.age,
+                educationLevel: req.user.educationLevel,
+                percentage: req.user.percentage,
+                stream: req.user.stream,
+                subjects: req.user.subjects
+            }
+        })
+    } catch(error) {
+        console.log(error);
+
+        return res.status(500).json({
+            success : false ,
+            message : "Internal server issue"
+        });
+    }
+};
 
 module.exports = {
     signup ,
     login , 
     getMe ,
+    updateProfile ,
 };
 
