@@ -47,5 +47,4 @@ const protect = async (req , res , next) => {
 // next is one of the most important concept in middleware , whenever a request is being made, it first passes thru middleware , middleware checks if the person is authenticated , if yes , next , if no, it will return a response for the previous request and never calls next().
 
 
-module.exports = protect;
-
+module.exports = {protect};
