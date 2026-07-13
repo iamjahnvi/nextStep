@@ -9,6 +9,8 @@ const connectDB = require("./config/db");
 const PORT = process.env.PORT || 5000;
 // we are hardcoding it , rn we'll use .env.
 
+const examRoutes = require("./routes/examRoutes");
+
 const startServer = async() => {
     // we have used async so that  functions keep on happening in background , which takes time to operate and have heavy code , and proceed further with functions with non-heavy code.
     await connectDB();
@@ -20,6 +22,8 @@ const startServer = async() => {
     // this starts the server , like it means keep listening to the incoming requests
 
 }
+
+app.use("api/v1/exams" , examRoutes);
 
 startServer();
 
