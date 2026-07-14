@@ -20,7 +20,7 @@ const examSchema = new mongoose.Schema({
     } ,
 
     minimumEducationLevel : {
-        type : String , 
+        type : Number , 
         required : true ,
         trim : true ,
     } ,
@@ -69,4 +69,3 @@ const examSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model("Exam" , examSchema);
-
