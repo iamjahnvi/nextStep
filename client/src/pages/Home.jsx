@@ -16,7 +16,6 @@ function Home(){
             <button onClick={() => navigate("/signup")}>Get started</button>
 
             <button onClick={() => navigate("/login")}>Login</button>
-
             
         </div>
     )
