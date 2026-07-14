@@ -2,37 +2,48 @@ const Exam = require("../models/Exam");
 
 const recommendExams = async(req , res) => {
     try {
-        const profile = req.user.profile;
+        const user = req.user;
 
-        if(!profile){
+        console.log("=== EXAM DEBUG: YOUR PROFILE DATA ===", user); // <--- Add this line!
+
+        if(!user){
             return res.status(400).json({
                 success : false , 
-                message : "Complete your profile first"
+                message : "user not found"
             });
         }
+
         // checks if the profile of user is completed
 
         const {
-            minimumAge ,
-            minimumEducationLevel ,
+            age ,
+            educationLevel ,
             stream , 
             percentage ,
             subjects ,
-        } = profile ;
+        } = user ;
 
         const query = {
-            minimumAge : {$lte : age} ,
-            minimumEducationLevel : {$lte : educationLevel} ,
-            streams : stream , 
 
-            $or : [
+
+            $and : [
                 {
-                    "eligibility.minimumPercentage" : {$exists : false}
-                } ,
+                    $or : [
+                        {minimumAge : {$lte : age}} ,
+                        {minimumAge : null}
+                    ]
+                } , 
                 {
-                    "eligibility.minimumPercentage" : {$lte : percentage}
+                    $or : [
+                        {"eligibility.minimumPercentage" : {$exists : false}} ,
+                        {"eligibility.minimumPercentage" : null},
+                        {"eligibility.minimumPercentage" : {$lte : percentage}} 
+                    ]
                 }
-            ]
+            ] ,
+            minimumEducationLevel : {$lte : educationLevel} ,
+            streams : {$in : [stream]}
+
         };
 
         const exams = await Exam.find(query);
