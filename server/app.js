@@ -5,6 +5,7 @@ const cors = require("cors");
 // importing cors , why?
 // becuause later reacts will run on localhost:5173 and backend runs on localhost:5000 this way browser will block the communication b/w two diff origins by default , so here comes CORS , it tells thr browser it's fine let frontend(react) talk to me.
 const routes = require("./routes");
+const examRoutes = require("./routes/examRoutes");
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.use(express.urlencoded({extended: true}));
 // this creates our express application, and everthing like routes, middleware, APIs will be attacted to app
 
 app.use("/api/v1" , routes);
+
+app.use("/api/v1/exams", examRoutes);
 
 app.get("/" , (req,res) => {
     res.send("Next Step Backend is Running")
