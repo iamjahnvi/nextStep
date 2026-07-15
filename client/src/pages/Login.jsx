@@ -37,9 +37,9 @@ function Login() {
     }
     return ( 
         <form onSubmit={handleSubmit}>
-            <input type="email" name="email"placeholder="Enter your email" value={formDataemail} onChange= {handleChange}/>
+            <input type="email" name="email"placeholder="Enter your email" value={formData.email} onChange= {handleChange}/>
 
-            <input type="password" name="email"placeholder="Enter your email" value={formDataemail} onChange={handleChange}/>
+            <input type="password" name="email" placeholder="Enter your email" value={formData.password} onChange={handleChange}/>
         </form>
     );
     <button type="submit">
