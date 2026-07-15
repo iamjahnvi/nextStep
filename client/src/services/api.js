@@ -9,6 +9,9 @@ api.interceptors.request.use(
         const token = localStorage.getItem("token");
         if (token) {
             config.headers = config.headers || {};
+
+            // config.headers ??= {};
+            // this is nullish assignment operator , which does the same job as above statement does.
             
             // This is a safety check. It says: "If the headers object doesn't exist yet, create an empty one." This prevents the code from crashing if config.headers is undefined.
 
@@ -17,7 +20,7 @@ api.interceptors.request.use(
         return config;
     },
     (error) => Promise.reject(error)
-    // This passes the error down the line to your own try/catch blocks or .catch() methods in your components so you can handle the failure gracefully.
+    // This passes the error down the line to your own try/catch blocks or .catch() methods in your components(signup or login) so you can handle the failure gracefully.
 );
 
 // api : instance of axios
