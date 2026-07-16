@@ -68,6 +68,36 @@ const recommendExams = async(req , res) => {
     }
 };
 
+const getExamById = async (req  , res) => {
+    try {
+
+        const {id} = req.params;
+
+        const exam = await Exam.findById(id);
+
+        if(!exam){
+            return res.status(404).json({
+                success : false ,
+                message : "Exam not found"
+            })
+        }
+
+        return res.status(200).json({
+            success : true,
+            message : exam
+        })
+
+    } catch(error) {
+        console.log(error);
+
+        return res.status(500).json({
+            success : false ,
+            message : "Internal server issue"
+        })
+    }
+}
+
 module.exports = {
     recommendExams ,
+    getExamById,
 };
