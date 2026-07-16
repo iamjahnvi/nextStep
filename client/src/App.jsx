@@ -1,11 +1,8 @@
 import{BrowserRouter , Routes , Route } from "react-router-dom";
 
 import Home from "./pages/Home";
-import Home from "./pages/ExamDetails";
-import Home from "./pages/Login";
-import Home from "./pages/Profile";
-import Home from "./pages/Recommendations";
-import Home from "./pages/Signup";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Recommendations from "./pages/Recommendations";
 import ExamDetails from "./pages/ExamDetails";
