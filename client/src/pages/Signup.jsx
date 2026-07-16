@@ -12,7 +12,7 @@ function Signup(){
         confirmPassword: ""
     });
 
-    const handleChange = (e) => {
+    const handleChange =(e) => {
         // e - event
         setFormData({
             ...formData,
@@ -20,7 +20,7 @@ function Signup(){
         });
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // normally when a form is submitted , the browser refreshes the page., but we don;t want that to happen , so we stop the default browser behaviour.
 
