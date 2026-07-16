@@ -37,7 +37,7 @@ function Profile(){
             if(response.data.success){
                 alert(response.data.message);
             }
-            navigate("/recommendation");
+            navigate("/recommendations");
         } catch(error){
             alert(error.response.data.message);
         }
