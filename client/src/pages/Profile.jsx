@@ -35,13 +35,12 @@ function Profile(){
         try{
             const response = await api.patch("/auth/profile", profileData);
             if(response.data.success){
-                alert(response.data.message);
+               console.log(response.data);
             }
             navigate("/recommendations");
         } catch(error){
-            alert(error.response.data.message);
+            alert(error.response?.data?.message || "something went wrong");
         }
-
 
     } 
 
@@ -57,7 +56,9 @@ function Profile(){
 
             <input type="text" name="subjects" placeholder="Enter subjects" value={formData.subjects} onChange={handleChange} />
             
+            <button type="submit">Save Profile</button>
         </form>
     );
-    <button type="submit">Save Profile</button>
 }
+
+export default Profile;
