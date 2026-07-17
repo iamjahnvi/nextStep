@@ -1,6 +1,9 @@
 const Exam = require("../models/Exam");
 
+
+
 const recommendExams = async(req , res) => {
+    console.log("recommend exams is running");
     try {
         const user = req.user;
 
@@ -47,6 +50,12 @@ const recommendExams = async(req , res) => {
         };
 
         const exams = await Exam.find(query);
+
+        console.log("========== QUERY ==========");
+        console.log(query);
+
+        console.log("========== EXAMS ==========");
+        console.log(exams);
 
         return res.status(200).json({
             success : true,

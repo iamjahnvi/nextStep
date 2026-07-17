@@ -158,6 +158,8 @@ const login = async (req,res) => {
     };
 }
 const updateProfile = async(req , res) => {
+    console.log("body recieved");
+    console.log(req.body);
     try {
         const {
             age,
@@ -172,26 +174,28 @@ const updateProfile = async(req , res) => {
         }
 
         if(age!==undefined){
-            req.user.age = age;
+            req.user.profile.age = age;
         }
 
         if(stream!==undefined){
-            req.user.stream = stream;
+            req.user.profile.stream = stream;
         }
 
         if(educationLevel!==undefined){
-            req.user.educationLevel = educationLevel;
+            req.user.profile.educationLevel = educationLevel;
         }
 
         if(subjects!==undefined){
-            req.user.subjects = subjects;
+            req.user.profile.subjects = subjects;
         }
 
         if(percentage!==undefined){
-            req.user.percentage = percentage;
+            req.user.profile.percentage = percentage;
         }
 
         await req.user.save();
+        console.log("After save");
+        console.log(req.user.profile);
 
         return res.status(200).json({
             success : true ,
@@ -200,11 +204,11 @@ const updateProfile = async(req , res) => {
                 id: req.user._id,
                 name: req.user.name,
                 email: req.user.email,
-                age: req.user.age,
-                educationLevel: req.user.educationLevel,
-                percentage: req.user.percentage,
-                stream: req.user.stream,
-                subjects: req.user.subjects
+                age: req.user.profile.age,
+                educationLevel: req.user.profile.educationLevel,
+                percentage: req.user.profile.percentage,
+                stream: req.user.profile.stream,
+                subjects: req.user.profile.subjects
             }
         })
     } catch(error) {
