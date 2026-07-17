@@ -24,7 +24,7 @@ const recommendExams = async(req , res) => {
             stream , 
             percentage ,
             subjects ,
-        } = user ;
+        } = user.profile ;
 
         const query = {
 
@@ -49,10 +49,17 @@ const recommendExams = async(req , res) => {
 
         };
 
-        const exams = await Exam.find(query);
-
+        
         console.log("========== QUERY ==========");
         console.log(query);
+
+
+        const allExams = await Exam.find();
+
+        console.log("ALL EXAMS IN DATABASE");
+        console.log(allExams);
+
+        const exams = await Exam.find(query);
 
         console.log("========== EXAMS ==========");
         console.log(exams);
