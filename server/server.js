@@ -23,7 +23,7 @@ const startServer = async() => {
 
 }
 
-app.use("api/v1/exams" , examRoutes);
+app.use("/api/v1/exams" , examRoutes);
 
 startServer();
 
