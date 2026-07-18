@@ -1,6 +1,6 @@
 const express = require("express");
 
-const {signup , login , getMe} = require("../controllers/authController");
+const {signup , login , getMe , updateProfile} = require("../controllers/authController");
 
 // here the signup is written inside {} , becuase authController.js will export multiple functions later.
 // like signup , login , logout , forgetPassword , reset Password.
