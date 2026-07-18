@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
             type : Number ,
         } ,
         educationLevel : {
-            type : Number ,
+            type : String ,
         },
         percentage : {
             type : Number ,
