@@ -10,15 +10,14 @@ const seedDatabase = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
 
-        console.log("Database Connected");
 
         await Exam.deleteMany();
 
-        console.log("Old exams deleted");
+   
 
         await Exam.insertMany(exams);
 
-        console.log("Exam data inserted successfully");
+       
 
         process.exit();
     } catch (error) {
