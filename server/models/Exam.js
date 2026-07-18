@@ -20,14 +20,13 @@ const examSchema = new mongoose.Schema({
     } ,
 
     minimumEducationLevel : {
-        type : Number , 
+        type : String , 
         required : true ,
         trim : true ,
     } ,
 
     minimumAge : {
         type : Number ,
-        required : true
     } ,
 
     registrationStartDate : {
