@@ -54,10 +54,7 @@ const recommendExams = async(req , res) => {
         console.log(query);
 
 
-        const allExams = await Exam.find();
-
-        console.log("ALL EXAMS IN DATABASE");
-        console.log(allExams);
+       
 
         const exams = await Exam.find(query);
 
