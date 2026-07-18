@@ -6,27 +6,25 @@ const exams = require("./data/exams");
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGODB_URL)
-.then(() => console.log("Database Connected"))
-.catch((err) => console.log(err));
-
 const seedDatabase = async () => {
     try {
+        await mongoose.connect(process.env.MONGO_URI);
 
+        console.log("Database Connected");
+
+        await Exam.deleteMany();
+
+        console.log("Old exams deleted");
+
+        await Exam.insertMany(exams);
+
+        console.log("Exam data inserted successfully");
+
+        process.exit();
     } catch (error) {
-
+        console.log(error);
+        process.exit(1);
     }
 };
-
-Exam.deleteMany();
-
-// This removes all existing exam documents to avoid duplicates.
-
-Exam.insertMany(exams);
-// This inserts all existing exam documents.
-
-console.log("Exam data inserted successfully.");
-
-mongoose.connection.close();
 
 seedDatabase();
