@@ -5,7 +5,7 @@ const router = express.Router();
 // method of express, whose functioning we'll store in variable router
 
 const authRoutes = require("./authRoutes")
-const profileRoutes = require("./profileRoutes");
+const examRoutes = require("./examRoutes");
 
 router.get("/" , (req,res) => {
     res.json({
@@ -15,5 +15,5 @@ router.get("/" , (req,res) => {
 });
 
 router.use("/auth" , authRoutes);
-router.use("/profile" , profileRoutes)
+router.use("/exams", examRoutes);
 module.exports = router;
