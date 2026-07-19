@@ -22,24 +22,34 @@ function Profile(){
        })
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
 
-        const profileData = {
+    const profileData = {
             ...formData,
             subjects: formData.subjects
                 .split(",")
                 .map(subject => subject.trim())
-        };
+    };
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        
 
         try{
+
+          
             const response = await api.patch("/auth/profile", profileData);
+            
             if(response.data.success){
                console.log(response.data);
             }
             navigate("/recommendations");
+         
         } catch(error){
             alert(error.response?.data?.message || "something went wrong");
+          
         }
 
     } 
