@@ -13,7 +13,8 @@ function Recommendations() {
 
         const fetchRecommendations = async () => {
             try {
-                const response = await api.get("/recommend");
+                const response = await api.get("exams/recommend");
+                // console.log(response.data);
                 setExams(response.data.data || []);
             } catch (error) {
                 alert(error.response?.data?.message || "Something went wrong");
