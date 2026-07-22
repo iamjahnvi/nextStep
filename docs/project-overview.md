@@ -210,7 +210,9 @@ and now run : npm run dev
 
 ---FLOW OF CODE
 1. create app.js 
-
+-(understand code written in app-js explained.)
+2. create server.js
+-(understand code written in server-js explained.)
 
 
 
