@@ -1,7 +1,10 @@
+require("dotenv").config();
+<!-- why we did it has been explained in env-js-explaination -->
+
 const app = require("./app");
 <!-- ./ means look for app.js file in the same folder -->
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 <!-- 
 in your server.js file ,  this line defines the port number on which your web server will listen to incoming requests.
 
