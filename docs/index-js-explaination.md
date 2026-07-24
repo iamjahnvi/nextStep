@@ -10,6 +10,10 @@ router.get("/" , (req,res) => {
     });
 });
 
+const authRoutes = require("./authRoutes");
+
+router.use("/auth" , authRoutes);
+
 <!-- 
 router : references the router object you just created.
 
