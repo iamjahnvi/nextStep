@@ -15,6 +15,9 @@ const connectDB = async () => {
 
         console.error(error.message);
         <!-- console.error() is an in-built method in node.js to print error messages to the console. -->
+
+        process.exit(1);
+        <!-- we called this so that the server doesn't continue when your password is wrong/internet is off/atlas is down. -->
     }
 }
 
