@@ -259,8 +259,10 @@ becuase node.js doesn't understand MongoDB directly in a convenient way.
 /email service configuration
 /firebase configuration
 
+5. update server.js
+-(include startServer thing inside it)
 
-
+6. create models/User.js
 
 
 
