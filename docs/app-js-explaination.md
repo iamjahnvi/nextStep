@@ -12,7 +12,7 @@ const cors = require("cors");
 imports cors(Cross-Origin Resource Sharing) package into your file.
 why it's here :  By default, browsers block frontend applications (like a React or Vue app running on http://localhost:5173) from talking to a backend server running on a different domain or port (like http://localhost:3000) due to security rules. Importing this package gives you the tool required to unlock cross-origin communication.-->
 
-const routes = require("./routes);
+const routes = require("./routes");
 
 const app = express();
 <!-- 
