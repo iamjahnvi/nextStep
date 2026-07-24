@@ -264,6 +264,30 @@ becuase node.js doesn't understand MongoDB directly in a convenient way.
 
 6. create models/User.js
 
+7. create controllers/authController.js
+-after this the flow of website will be like this :-
+
+. Client sends POST /api/v1/auth/signup
+. Express receives the request.
+. Express matches the request with authRoutes.js.
+. authRoutes.js forwards the request to signupController().
+. signupController extracts:
+   - name
+   - email
+   - password
+. Validate the input.
+   - Are all fields present?
+   - Is the email valid?
+   - Is the password strong enough?
+. Check if a user with this email already exists.
+. Hash the password using bcrypt.
+. Create a new User document.
+
+. Save it to MongoDB.
+
+. MongoDB returns the saved document.
+
+. Controller sends a success response (201 Created).
 
 
 
