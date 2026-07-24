@@ -220,11 +220,44 @@ and now run : npm run dev
 -make some changes in app.js 
 -(open app.js)
 -(add const cors = require("cors") and other lines related to it. )
+5. Route Folder 
+-inside routes/ , create index.js 
+6. visit http://localhost:5000/api/v1
+-you should recieve :-
+{
+    "success": true,
+    "message": "Career Compass API v1"
+}
 
+-first REST API done
 
+7. install postman
 
+-----------------------------------------------------------
 
+SPRINT-2
 
+1. Download database MongoDB Atlas Free Tier
+-get the connection string like :-
+mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/
+-store it in MONGO_URI in .env file
+
+2. Mongoose
+-why mongoose ? 
+becuase node.js doesn't understand MongoDB directly in a convenient way.
+
+3. Database Design:-
+-we will create a user model , consisting of name, email id , passowrds , age , etc
+
+4. Connect the Backend to MongoDB by Creating config/db.js.
+
+-why config?
+-becuase config is about configuring external services like :-
+
+/database connection
+/cloudinary configuration
+/email service configuration
+/firebase configuration
 
 
 
