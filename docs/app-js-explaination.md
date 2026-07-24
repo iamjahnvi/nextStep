@@ -12,6 +12,8 @@ const cors = require("cors");
 imports cors(Cross-Origin Resource Sharing) package into your file.
 why it's here :  By default, browsers block frontend applications (like a React or Vue app running on http://localhost:5173) from talking to a backend server running on a different domain or port (like http://localhost:3000) due to security rules. Importing this package gives you the tool required to unlock cross-origin communication.-->
 
+const routes = require("./routes);
+
 const app = express();
 <!-- 
 express() : it is a top-level function exported by the express module that we imported above.
@@ -30,6 +32,7 @@ it is an in-built express middlware function that parses incoming requests with 
 why it's here : when a client sends data to the server via POST or PUT request , the raw data arrives as a stream of text bytes. This line intercepts that raw text , converts it into a usable js object, and attaches it to req.body, so that you can easily write code like req.body.email.
 -->
 
+app.use("/api/v1" , routes);
 
 app.get("/" , (req,res) => {
     res.send("Next Step Backend is running")
