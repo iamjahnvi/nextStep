@@ -288,19 +288,11 @@ becuase node.js doesn't understand MongoDB directly in a convenient way.
 . MongoDB returns the saved document.
 
 . Controller sends a success response (201 Created).
+-->
 
+8. create routes/authRoutes.js
 
+9. register this route in routes/index.js
 
+10. create controller/authController.js
 
-
-
-
-
-
-
-
-
-
-
-
- -->
