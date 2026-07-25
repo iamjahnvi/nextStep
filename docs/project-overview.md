@@ -233,7 +233,7 @@ and now run : npm run dev
 
 7. install postman
 
------------------------------------------------------------
+----------------------------------------------------------
 
 SPRINT-2
 
@@ -295,4 +295,60 @@ becuase node.js doesn't understand MongoDB directly in a convenient way.
 9. register this route in routes/index.js
 
 10. create controller/authController.js
+
+11. Test :-
+-start the backend  : npm run dev
+-open postman
+-method : POST
+-url : http://localhost:5000/api/v1/auth/signup
+-click body -> raw ->  json
+-send : 
+{
+  "name": "Pixie",
+  "email": "pixie@gmail.com",
+  "password": "Password123!"
+}
+
+# key point : till now we were testing if route is working , controller is connected , express is configured correctly , and postman can reach our API , but now we will move forward to actually to reading requested data, validating it , checking dor existing users , and then hashing passwords with bcrypt , and saving the user in MongoDB.
+
+# A mini HTTP cheat sheet for our project
+# 200 => Success (fetch/update) / 201 => Created (signup, create bookmark)  / 400 => Bad request (missing fields) /401 => Unauthorized (not logged in) / 403 => Forbidden(no permission) / 404 => Not Found / 409 => conflict (email already exists) / 500 => server error
+
+----------------------------------------------------------
+
+SPRINT - 3
+
+# Signup implementation:-
+Read request body
+↓
+Check if any field is missing
+↓
+Check if email already exists
+↓
+Hash password
+↓
+Create User object
+↓
+Save User
+↓
+Return success
+
+
+1. open authController.js and replace signup placeholder.
+
+2. Test in postman for diff use cases.
+
+# after this , user will be able to log in, backend verifies email and password , and generates jwt token , frontend will later use this token for protected routes.
+
+3. create jwt token 
+-open .env 
+-add jwt_secret = my_super_secret_key_12345
+-add {const jwt = require("jsonwebtoken")} , at the top of authController.js
+
+4. set up route for login in authRoutes.js.
+
+5. write the code for generating jsonwebtoken in utils/generateToken.js
+
+6. create middleware/authMiddleware.js
+
 
