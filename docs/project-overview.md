@@ -351,4 +351,31 @@ Return success
 
 6. create middleware/authMiddleware.js
 
+7. write the business logic related to middleware in controller and set up it's route in authRoutes.js
+
+# TEST IN POSTMAN : copy the token returned by POST /api/v1/auth/login , and then make a new request GET /api/v1/auth/me , after that go to headers and add key - authorization and value - Bearer {token} , and then get response
+
+8. create the exam model.
+
+9. create data/exams.js  , that contains data about exams.
+
+10. create seed.js 
+-which will connect to MongoDB
+-delete old exam data
+-insert fresh exam data
+
+----------------------------------------------------------
+
+SPRINT-4
+
+# COMPLETION OF PROFILE 
+# after login , user fills in :- age , education , stream , subjects etc
+
+1. create a new route - routes/profileRoutes.js
+
+2. create controllers/profileController.js 
+
+
+
+
 
