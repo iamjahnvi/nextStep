@@ -46,12 +46,6 @@ const userSchema = new mongoose.Schema({
                 type: String,
             },
         ],
-
-        careerInterests: [
-            {
-                type: String,
-            },
-        ]
     } ,
     {
         timestamps : true
