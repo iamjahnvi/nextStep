@@ -1,6 +1,5 @@
 cont User = require("../models/User");
 
-
 const updateProfile = async(req,res) => {
     try{
 
