@@ -244,7 +244,7 @@ mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/
 
 2. Mongoose
 -why mongoose ? 
-becuase node.js doesn't understand MongoDB directly in a convenient way.
+because node.js doesn't understand MongoDB directly in a convenient way.
 
 3. Database Design:-
 -we will create a user model , consisting of name, email id , passowrds , age , etc
@@ -268,7 +268,7 @@ becuase node.js doesn't understand MongoDB directly in a convenient way.
 -after this the flow of website will be like this :-
 
 . Client sends POST /api/v1/auth/signup
-. Express receives the request.
+. Express receives the request.22
 . Express matches the request with authRoutes.js.
 . authRoutes.js forwards the request to signupController().
 . signupController extracts:
