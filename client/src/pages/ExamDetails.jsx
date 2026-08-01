@@ -43,9 +43,9 @@ function ExamDetails() {
 
     return(
         <div>
-            <h1>exam.name</h1>
-            <p>exam.fullForm</p>
-            <p>exam.description</p>
+            <h1>{exam.name}</h1>
+            <p>{exam.fullForm}</p>
+            <p>{exam.description}</p>
 
             <p>Minimum Age : {exam.minimumAge}</p>
 
