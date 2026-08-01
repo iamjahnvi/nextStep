@@ -15,7 +15,7 @@ function App(){
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/profile" element={<Profile/>}></Route>
-        <Route path="/exam/:id" element={<ExamDetails />}></Route>
+        <Route path="/exams/:id" element={<ExamDetails />}></Route>
         <Route path="/recommendations" element={<Recommendations />}></Route>
       </Routes>
       </BrowserRouter>
@@ -24,3 +24,4 @@ function App(){
 
 export default App;
 
+// https://www.instagram.com/p/DbcegXIP7YW/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==
