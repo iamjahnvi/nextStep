@@ -24,6 +24,8 @@ const recommendExams = async(req , res) => {
             subjects ,
         } = user.profile ;
 
+        // reading the data , this is known as object destructing in javascript
+
         const query = {
 
 
@@ -52,6 +54,23 @@ const recommendExams = async(req , res) => {
         console.log(query);
 
         const exams = await Exam.find(query);
+
+        const today = new Date();
+
+        const updatedExams = exams.map((exam)=> {
+            let status = " ";
+            let openingIn = " ";
+            let closingIn = " ";
+            if(today < registrationEndDate && today > registrationStartDate){
+                status = "Open"
+                closingIn = registrationEndDate - registrationStartDate;
+            } else if(today < registrationStartDate){
+                status = "Opening soon"
+                opensIn = registrationStartDate - today
+            } else {
+                status = "Closed"
+            }
+        })
 
         console.log("========== EXAMS ==========");
         console.log(exams);
@@ -92,7 +111,7 @@ const getExamById = async (req  , res) => {
 
         return res.status(200).json({
             success : true,
-            message : exam
+            data : exam
         })
 
     } catch(error) {
