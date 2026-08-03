@@ -58,19 +58,30 @@ const recommendExams = async(req , res) => {
         const today = new Date();
 
         const updatedExams = exams.map((exam)=> {
+
+            const{registrationStartDate,registrationEndDate} = exam;
             let status = " ";
-            let openingIn = " ";
-            let closingIn = " ";
+            let openingIn = null;
+            let closingIn = null;
             if(today < registrationEndDate && today > registrationStartDate){
                 status = "Open"
-                closingIn = registrationEndDate - registrationStartDate;
+                closingIn = registrationEndDate - today;
             } else if(today < registrationStartDate){
                 status = "Opening soon"
-                opensIn = registrationStartDate - today
+                openingIn = registrationStartDate - today
             } else {
                 status = "Closed"
             }
-        })
+
+            return{
+                ...exam.toObject() ,
+                // these three dots mean the spread syntax in javascript , which helps to copies the properties of one object to another brand new object.
+                // if we'd hv only written exam , it would hv copied the raw Mongoose document wrapper + your data + internal Mongoose properties but writing exam.toObject() , strips away mongoose baggage , leaving only , a clean js object with your new status fields.
+                status ,
+                openingIn,
+                closingIn
+            };
+        });
 
         console.log("========== EXAMS ==========");
         console.log(exams);
@@ -84,6 +95,8 @@ const recommendExams = async(req , res) => {
 
         // object destructuring
         // it is a feature of js that allows us to extract properties from an obj and bind them to variables in a single clean line of code.
+
+        // writing exam.registrationStartDate , exam.registrationEndDate etc is equivalent to saying const{registrationStartDate , registrationEndDate} = exam
 
     } catch(error) {
         console.log(error);
