@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 
 function ExamDetails() {
-
     const navigate = useNavigate();
 
     const { id } = useParams();
