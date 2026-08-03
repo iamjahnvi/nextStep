@@ -48,7 +48,6 @@ const recommendExams = async(req , res) => {
             streams : {$in : [stream]}
 
         };
-
         
         console.log("========== QUERY ==========");
         console.log(query);
@@ -65,10 +64,14 @@ const recommendExams = async(req , res) => {
             let closingIn = null;
             if(today < registrationEndDate && today > registrationStartDate){
                 status = "Open"
-                closingIn = registrationEndDate - today;
+                closingIn = Math.ceil(((registrationEndDate - today)/1000*60*60*24));
+
+                // if we chose to print closingIn as registrationEndDate-today then it would print something like 1036800000 representing the number of milliseconds elapsed since january 1, 1970 , but instead of this , we'll calculate no. of days which will be :-
+                // Math.ceil((registrationEndDate-today)/(1000*60*60*24))
+
             } else if(today < registrationStartDate){
-                status = "Opening soon"
-                openingIn = registrationStartDate - today
+                status = "Opening Soon"
+                openingIn = Math.ceil(((registrationStartDate-today)/1000*24*60*60));
             } else {
                 status = "Closed"
             }
@@ -89,7 +92,7 @@ const recommendExams = async(req , res) => {
         return res.status(200).json({
             success : true,
             count : exams.length ,
-            data : exams ,
+            data : updatedExams ,
         })
         // standard way of returing , data , to frontend
 
