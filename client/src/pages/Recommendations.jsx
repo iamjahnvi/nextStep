@@ -31,6 +31,7 @@ function Recommendations() {
                 exams.map((exam) => (
                     <div key = {exam._id}>
                         <h2>{exam.name}</h2>
+                        <p>{exam.status}</p>
 
                         <button onClick={() => navigate(`/exams/${exam._id}`)}>View Details</button>
                     </div>
