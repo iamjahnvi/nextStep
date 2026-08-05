@@ -82,7 +82,7 @@ Stream
 Subjects
 
 
--Exams :- 
+- Exams :- 
 
 Name
 Full Form
