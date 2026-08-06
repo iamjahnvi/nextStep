@@ -33,7 +33,7 @@ const updateProfile = async(req,res) => {
             req.user.profile.subjects = subjects;
         }
 
-        await req.user.save();
+        awaitt req.user.save();
 
         return res.status(200).json({
             sucess : true ,
