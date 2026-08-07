@@ -24,6 +24,8 @@ function Recommendations() {
         fetchRecommendations();
     }, []);
 
+    console.log(exams);
+
     return (
         <div>
             <h1>Recommended Exams</h1>
@@ -32,6 +34,11 @@ function Recommendations() {
                     <div key = {exam._id}>
                         <h2>{exam.name}</h2>
                         <p>{exam.status}</p>
+
+                        {exam.status === "Opening Soon" && (<p>Opens in {exam.openingIn} days</p>
+                        )}
+
+                        {exam.status === "Open" && (<p>Closes in {exam.closingIn} days</p>)}
 
                         <button onClick={() => navigate(`/exams/${exam._id}`)}>View Details</button>
                     </div>
