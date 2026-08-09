@@ -216,7 +216,7 @@ and now run : npm run dev
 -(understand code written in server-js explained.)
 3. create env
 -need of env : we store our confidencial data like port number , mongo_url , and jwt_secret , passwords in .env, so that no-one sees them.
--(understand code written fin env-js explained.)
+-(understand code written in env-js explained.)
 4. MIDDLEWARE : 
 -make some changes in app.js 
 -(open app.js)
@@ -269,7 +269,7 @@ because node.js doesn't understand MongoDB directly in a convenient way.
 -after this the flow of website will be like this :-
 
 . Client sends POST /api/v1/auth/signup
-. Express receives the request.22
+. Express receives the request.
 . Express matches the request with authRoutes.js.
 . authRoutes.js forwards the request to signupController().
 . signupController extracts:
@@ -334,12 +334,12 @@ Save User
 ↓
 Return success
 
-
 1. open authController.js and replace signup placeholder.
 
 2. Test in postman for diff use cases.
 
 # after this , user will be able to log in, backend verifies email and password , and generates jwt token , frontend will later use this token for protected routes.
+--------------------------------resume from here-----
 
 3. create jwt token 
 -open .env 
