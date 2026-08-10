@@ -8,4 +8,4 @@ const router = express.Router();
 
 router.patch("/" , protect  , updateProfile );
 
-module.exports = router;
+module exports = router;
