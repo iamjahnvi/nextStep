@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NextStep — Log in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #EDF0F6;
+    --card: #FFFFFF;
+    --ink: #16233F;
+    --ink-2: #1D2E52;
+    --ink-3: #223763;
+    --ink-soft: #55617D;
+    --ink-faint: #8993AC;
+    --marigold: #E29A34;
+    --marigold-dark: #C6822A;
+    --marigold-soft: #F0C888;
+    --sage: #4F7A5E;
+    --rule: #C7CEDD;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{ height:100%; }
+  body{
+    font-family:'Space Grotesk', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    color:var(--ink);
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  a{ color:inherit; text-decoration:none; }
+
+  .layout{ min-height:100vh; display:grid; grid-template-columns:440px 1fr; }
+
+  /* ---------- LEFT: FORM PANEL ---------- */
+  .panel-left{
+    background:var(--paper); padding:40px 44px; display:flex; flex-direction:column;
+  }
+  .brand{ display:flex; align-items:center; gap:9px; font-weight:700; font-size:18px; margin-bottom:56px; }
+  .brand svg{ display:block; }
+
+  .form-wrap{ flex:1; display:flex; flex-direction:column; justify-content:center; max-width:340px; }
+
+  h1{ font-size:28px; letter-spacing:-0.01em; font-weight:700; margin-bottom:10px; }
+  .signup-line{ font-size:14px; color:var(--ink-soft); margin-bottom:28px; }
+  .signup-line a{ color:var(--marigold-dark); font-weight:600; }
+
+  .oauth-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:12px 16px; border:1.5px solid var(--rule); border-radius:10px;
+    background:var(--card); font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:14.5px;
+    cursor:pointer; margin-bottom:12px; color:var(--ink);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .oauth-btn:hover{ border-color:var(--ink-faint); background:var(--paper); }
+
+  .divider{ display:flex; align-items:center; gap:12px; margin:22px 0; }
+  .divider::before, .divider::after{ content:''; flex:1; height:1px; background:var(--rule); }
+  .divider span{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint); letter-spacing:.03em; white-space:nowrap; }
+
+  .field{ margin-bottom:16px; }
+  .field label{
+    display:block; font-family:'IBM Plex Mono', monospace; font-size:10px;
+    letter-spacing:.09em; color:var(--ink-faint); margin-bottom:7px; text-transform:uppercase;
+  }
+  .input-shell{ position:relative; }
+  input{
+    width:100%; font-family:'Space Grotesk', sans-serif; font-size:14.5px; color:var(--ink);
+    padding:12px 14px; border-radius:9px; border:1.5px solid var(--rule);
+    background:var(--card); outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  input::placeholder{ color:var(--ink-faint); }
+  input:focus{ border-color:var(--marigold); box-shadow:0 0 0 3px rgba(226,154,52,0.15); }
+  input[data-pw]{ padding-right:44px; }
+
+  .toggle-eye{
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    width:24px; height:24px; display:flex; align-items:center; justify-content:center;
+    color:var(--ink-faint); cursor:pointer; background:none; border:none; padding:0;
+  }
+  .toggle-eye:hover{ color:var(--ink-soft); }
+  .toggle-eye svg{ width:18px; height:18px; }
+
+  .row-between{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+  .remember{ display:flex; align-items:center; gap:7px; font-size:13px; color:var(--ink-soft); }
+  .remember input{ width:14px; height:14px; padding:0; accent-color:var(--marigold); }
+  .forgot{ font-size:13px; color:var(--marigold-dark); font-weight:600; }
+
+  .btn-primary{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:15px;
+    padding:13px 24px; border-radius:10px; cursor:pointer; border:none;
+    background:var(--marigold); color:#241A08;
+    box-shadow:0 6px 0 var(--marigold-dark);
+    transition:transform .12s ease, box-shadow .12s ease;
+    width:100%;
+  }
+  .btn-primary:hover{ transform:translateY(-1px); box-shadow:0 8px 0 var(--marigold-dark); }
+  .btn-primary:active{ transform:translateY(3px); box-shadow:0 3px 0 var(--marigold-dark); }
+
+  .foot-note{ font-size:12px; color:var(--ink-faint); margin-top:26px; line-height:1.6; }
+
+  /* ---------- RIGHT: PROMO PANEL ---------- */
+  .panel-right{
+    position:relative; overflow:hidden;
+    background:linear-gradient(160deg, var(--ink) 0%, var(--ink-2) 55%, var(--ink-3) 100%);
+    display:flex; align-items:center;
+    padding:64px;
+  }
+  .bg-deco{ position:absolute; inset:0; opacity:0.9; }
+
+  .promo{ position:relative; z-index:2; max-width:460px; }
+  .promo h2{ color:#F4F6FA; font-size:36px; line-height:1.18; letter-spacing:-0.015em; font-weight:700; margin-bottom:20px; }
+  .promo p{ color:#AEB8D1; font-size:15.5px; line-height:1.65; margin-bottom:16px; max-width:400px; }
+  .promo .code{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:13px;
+    color:var(--marigold-soft); background:rgba(226,154,52,0.12); border:1px solid rgba(226,154,52,0.3);
+    padding:6px 12px; border-radius:7px; margin:8px 0 24px;
+  }
+  .promo .browse{
+    display:inline-flex; align-items:center; gap:8px; color:#F4F6FA; font-weight:600; font-size:14.5px;
+    border-bottom:2px solid var(--marigold); padding-bottom:3px;
+  }
+
+  .promo-cards{ display:flex; gap:10px; margin-top:44px; }
+  .mini-chip{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:#DCE2EE;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    padding:7px 11px; border-radius:7px;
+  }
+
+  @media (max-width:960px){
+    .layout{ grid-template-columns:1fr; }
+    .panel-right{ display:none; }
+    .panel-left{ padding:32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="panel-left">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 30 30">
+        <rect x="1" y="1" width="28" height="28" rx="7" fill="none" stroke="#16233F" stroke-width="2"/>
+        <circle cx="1" cy="15" r="3.2" fill="#EDF0F6"/>
+        <circle cx="29" cy="15" r="3.2" fill="#EDF0F6"/>
+        <text x="15" y="20" text-anchor="middle" font-size="14" font-weight="700" fill="#16233F" font-family="'IBM Plex Mono', monospace">N</text>
+      </svg>
+      NextStep
+    </div>
+
+    <div class="form-wrap">
+      <h1>Log in to your account</h1>
+      <div class="signup-line">Don't have an account? <a href="#">Sign up</a></div>
+
+      <button class="oauth-btn" type="button">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="divider"><span>OR WITH EMAIL AND PASSWORD</span></div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label class="mono" for="email">Email address</label>
+          <div class="input-shell">
+            <input id="email" type="email" placeholder="you@example.com" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="mono" for="password">Password</label>
+          <div class="input-shell">
+            <input id="password" data-pw type="password" placeholder="Enter your password" required>
+            <button type="button" class="toggle-eye" data-target="password" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="row-between">
+          <label class="remember"><input type="checkbox"> Remember me</label>
+          <a class="forgot" href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-primary">Log in</button>
+      </form>
+
+      <div class="foot-note">By continuing, you agree to NextStep's Terms of Service and Privacy Policy.</div>
+    </div>
+  </div>
+
+  <div class="panel-right">
+    <svg class="bg-deco" viewBox="0 0 700 800" preserveAspectRatio="xMidYMid slice">
+      <path d="M540 40 L470 40 L470 220 L540 220" fill="none" stroke="rgba(226,154,52,0.16)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M660 60 L730 60 L730 240 L660 240" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="560" cy="560" r="150" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
+      <circle cx="560" cy="560" r="118" fill="none" stroke="rgba(226,154,52,0.14)" stroke-width="2" stroke-dasharray="3 7"/>
+      <circle cx="560" cy="560" r="90" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>
+      <g transform="translate(180,620)">
+        <path d="M0 -46 L28 -14 L11 -14 L11 46 L-11 46 L-11 -14 L-28 -14 Z" fill="rgba(226,154,52,0.10)" transform="rotate(0)"/>
+        <path d="M0 -46 L28 -14 L11 -14 L11 46 L-11 46 L-11 -14 L-28 -14 Z" fill="rgba(255,255,255,0.05)" transform="rotate(72)"/>
+        <path d="M0 -46 L28 -14 L11 -14 L11 46 L-11 46 L-11 -14 L-28 -14 Z" fill="rgba(226,154,52,0.10)" transform="rotate(144)"/>
+        <path d="M0 -46 L28 -14 L11 -14 L11 46 L-11 46 L-11 -14 L-28 -14 Z" fill="rgba(255,255,255,0.05)" transform="rotate(216)"/>
+        <path d="M0 -46 L28 -14 L11 -14 L11 46 L-11 46 L-11 -14 L-28 -14 Z" fill="rgba(226,154,52,0.10)" transform="rotate(288)"/>
+      </g>
+    </svg>
+
+    <div class="promo">
+      <h2>Every exam window, tracked automatically.</h2>
+      <p>Once you're in, NextStep watches application deadlines for every exam you qualify for and tells you before they close.</p>
+      <div class="code mono">JOIN500 — first 500 sign-ups get early access</div>
+      <br>
+      <a class="browse" href="#">Browse supported exams →</a>
+
+      <div class="promo-cards">
+        <span class="mini-chip">JEE</span>
+        <span class="mini-chip">NEET</span>
+        <span class="mini-chip">CUET</span>
+        <span class="mini-chip">CLAT</span>
+        <span class="mini-chip">+40 more</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.toggle-eye').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target);
+      const isPw = input.type === 'password';
+      input.type = isPw ? 'text' : 'password';
+      btn.setAttribute('aria-label', isPw ? 'Hide password' : 'Show password');
+      btn.querySelector('svg').innerHTML = isPw
+        ? '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/>'
+        : '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>';
+    });
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Wire this up to your login endpoint.');
+  });
+</script>
+</body>
+</html>
