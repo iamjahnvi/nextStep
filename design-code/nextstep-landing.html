@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NextStep — Find your exams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #EDF0F6;
+    --paper-2: #E4E8F1;
+    --card: #FDFDFC;
+    --ink: #16233F;
+    --ink-soft: #55617D;
+    --ink-faint: #8993AC;
+    --marigold: #E29A34;
+    --marigold-dark: #C6822A;
+    --sage: #4F7A5E;
+    --rule: #C7CEDD;
+    --shadow: 0 1px 0 rgba(22,35,63,0.06);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:
+      radial-gradient(1200px 500px at 85% -10%, rgba(226,154,52,0.10), transparent 60%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Space Grotesk', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  a{color:inherit; text-decoration:none;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:1180px; margin:0 auto; padding:28px 32px 0;
+  }
+  .brand{
+    display:flex; align-items:center; gap:8px;
+    font-weight:700; font-size:19px; letter-spacing:-0.01em;
+  }
+  .brand-mark{
+    width:20px; height:20px; border:2px solid var(--ink); border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600;
+    transform:rotate(-6deg);
+  }
+  .nav-login{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink-soft);
+    padding:8px 16px; border:1px solid var(--rule); border-radius:999px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .nav-login:hover{ border-color:var(--ink); color:var(--ink); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    max-width:1180px; margin:0 auto;
+    display:grid; grid-template-columns:1fr 1fr; gap:56px;
+    align-items:center;
+    padding:76px 32px 90px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.14em;
+    color:var(--marigold-dark); font-weight:600; text-transform:uppercase;
+    display:flex; align-items:center; gap:9px; margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:''; width:22px; height:1px; background:var(--marigold-dark);
+  }
+  h1{
+    font-size:52px; line-height:1.05; letter-spacing:-0.02em; font-weight:700;
+    margin-bottom:22px;
+  }
+  h1 em{
+    font-style:normal; color:var(--marigold-dark);
+    text-decoration:underline; text-decoration-color:rgba(226,154,52,0.4);
+    text-decoration-thickness:3px; text-underline-offset:6px;
+  }
+  .sub{
+    font-size:17px; line-height:1.6; color:var(--ink-soft); max-width:460px;
+    margin-bottom:34px;
+  }
+  .cta-row{ display:flex; gap:12px; align-items:center; margin-bottom:22px; }
+  .btn{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:15px;
+    padding:13px 24px; border-radius:10px; cursor:pointer; border:none;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-primary{
+    background:var(--marigold); color:#241A08;
+    box-shadow:0 6px 0 var(--marigold-dark);
+  }
+  .btn-primary:hover{ box-shadow:0 8px 0 var(--marigold-dark); }
+  .btn-primary:active{ transform:translateY(3px); box-shadow:0 3px 0 var(--marigold-dark); }
+  .btn-secondary{
+    background:transparent; color:var(--ink); border:1.5px solid var(--rule);
+  }
+  .btn-secondary:hover{ border-color:var(--ink); }
+  .trust{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--ink-faint);
+  }
+
+  /* ---------- ADMIT CARD VISUAL ---------- */
+  .card-stage{ position:relative; display:flex; justify-content:center; }
+  .admit-card{
+    width:100%; max-width:400px; background:var(--card);
+    border-radius:14px; position:relative;
+    box-shadow:0 30px 60px -20px rgba(22,35,63,0.28), 0 2px 6px rgba(22,35,63,0.08);
+    border:1px solid rgba(22,35,63,0.06);
+    transform:rotate(2.5deg);
+    animation:cardIn .7s cubic-bezier(.2,.9,.25,1) both;
+  }
+  @keyframes cardIn{
+    from{ opacity:0; transform:rotate(2.5deg) translateY(18px) scale(.97); }
+    to{ opacity:1; transform:rotate(2.5deg) translateY(0) scale(1); }
+  }
+  .admit-card::before{
+    content:''; position:absolute; left:-7px; top:0; bottom:0; width:14px;
+    background-image: radial-gradient(circle, var(--paper) 3.5px, transparent 3.6px);
+    background-size:14px 16px; background-repeat:repeat-y;
+  }
+  .card-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:20px 22px 14px; border-bottom:1px dashed var(--rule);
+  }
+  .card-top .mono{ font-size:10.5px; color:var(--ink-faint); letter-spacing:.08em; }
+  .card-title{ font-weight:700; font-size:15px; margin-top:2px; }
+  .barcode{
+    display:flex; gap:2px; align-items:flex-end; height:24px;
+  }
+  .barcode span{ width:2px; background:var(--ink); display:block; }
+
+  .card-body{ display:flex; gap:16px; padding:18px 22px; }
+  .photo-box{
+    width:64px; height:78px; border-radius:6px; flex-shrink:0;
+    background:linear-gradient(150deg, #DCE3F0, #C9D2E6);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-weight:600; color:var(--ink-soft); font-size:20px;
+    border:1px solid rgba(22,35,63,0.08);
+  }
+  .fields{ flex:1; display:flex; flex-direction:column; gap:9px; }
+  .field label{
+    display:block; font-family:'IBM Plex Mono', monospace; font-size:9px;
+    letter-spacing:.09em; color:var(--ink-faint); margin-bottom:2px;
+  }
+  .field .val{ font-size:13.5px; font-weight:500; }
+
+  .card-matches{ padding:4px 22px 20px; }
+  .matches-label{
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.09em;
+    color:var(--ink-faint); margin-bottom:8px;
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:6px; }
+  .chip{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:500;
+    background:rgba(79,122,94,0.09); color:var(--sage); border:1px solid rgba(79,122,94,0.25);
+    padding:5px 9px; border-radius:6px; display:flex; align-items:center; gap:4px;
+  }
+  .chip::before{ content:'✓'; font-weight:700; }
+
+  .stamp{
+    position:absolute; top:118px; right:-14px;
+    width:100px; height:100px; border-radius:50%;
+    border:2.5px solid var(--sage); color:var(--sage);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    transform:rotate(-16deg);
+    font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:12.5px;
+    letter-spacing:.05em; line-height:1.25;
+    background:rgba(253,253,252,0.6);
+    animation:stampIn .5s cubic-bezier(.34,1.56,.64,1) .5s both;
+  }
+  @keyframes stampIn{
+    from{ opacity:0; transform:rotate(-16deg) scale(1.6); }
+    to{ opacity:1; transform:rotate(-16deg) scale(1); }
+  }
+
+  /* ---------- EXAM STRIP ---------- */
+  .strip-wrap{
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+    background:var(--paper-2); overflow:hidden; padding:16px 0;
+  }
+  .strip{
+    display:flex; gap:48px; width:max-content;
+    animation:scroll 28s linear infinite;
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink-soft);
+    letter-spacing:.04em;
+  }
+  .strip span{ white-space:nowrap; }
+  .strip span::after{ content:'·'; margin-left:48px; color:var(--ink-faint); }
+  @keyframes scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  /* ---------- HOW IT WORKS ---------- */
+  .how{ max-width:1180px; margin:0 auto; padding:96px 32px; }
+  .how-head{ max-width:520px; margin-bottom:56px; }
+  .how-head h2{ font-size:32px; letter-spacing:-0.01em; margin-bottom:12px; }
+  .how-head p{ color:var(--ink-soft); font-size:15.5px; line-height:1.6; }
+
+  .steps{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:0;
+    border-top:1px solid var(--rule);
+  }
+  .step{
+    padding:28px 28px 0 0; position:relative;
+    border-right:1px dashed var(--rule);
+  }
+  .step:last-child{ border-right:none; }
+  .step-num{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--marigold-dark);
+    background:var(--paper); display:inline-block; padding:6px 0 6px 0;
+    margin-top:-11px; margin-bottom:16px; font-weight:600;
+  }
+  .step h3{ font-size:18px; margin-bottom:10px; letter-spacing:-0.01em; }
+  .step p{ color:var(--ink-soft); font-size:14.5px; line-height:1.6; max-width:280px; }
+
+  /* ---------- FOOTER CTA ---------- */
+  .footer-cta{
+    max-width:1180px; margin:0 auto 90px; padding:0 32px;
+  }
+  .fc-inner{
+    background:var(--ink); color:var(--paper);
+    border-radius:20px; padding:56px 48px;
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    flex-wrap:wrap;
+    position:relative; overflow:hidden;
+  }
+  .fc-inner::after{
+    content:''; position:absolute; right:-60px; top:-60px; width:220px; height:220px;
+    border-radius:50%; background:radial-gradient(circle, rgba(226,154,52,0.25), transparent 70%);
+  }
+  .fc-inner h3{ font-size:26px; max-width:380px; letter-spacing:-0.01em; }
+  .fc-inner p{ color:#AEB8D1; margin-top:8px; font-size:14.5px; }
+
+  footer{
+    max-width:1180px; margin:0 auto; padding:0 32px 40px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint);
+  }
+
+  @media (max-width:860px){
+    .hero{ grid-template-columns:1fr; padding-top:48px; }
+    h1{ font-size:38px; }
+    .steps{ grid-template-columns:1fr; }
+    .step{ border-right:none; border-bottom:1px dashed var(--rule); padding-bottom:28px; }
+    .fc-inner{ flex-direction:column; align-items:flex-start; }
+    .stamp{ right:8px; }
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="brand">
+      <span class="brand-mark mono">N</span>
+      NextStep
+    </div>
+    <a class="nav-login mono" href="#">Login →</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Eligibility check</div>
+      <h1>Find every exam<br>you're <em>actually</em><br>eligible for.</h1>
+      <p class="sub">Answer a few questions about your class, stream and marks. We'll match your profile against 40+ national entrance exams — no guesswork, no missed deadlines.</p>
+      <div class="cta-row">
+        <button class="btn btn-primary">Get started</button>
+        <button class="btn btn-secondary">Login</button>
+      </div>
+      <div class="trust mono">Trusted by students prepping for JEE, NEET, CUET & CLAT</div>
+    </div>
+
+    <div class="card-stage">
+      <div class="admit-card">
+        <div class="card-top">
+          <div>
+            <div class="mono">ELIGIBILITY SLIP</div>
+            <div class="card-title">Your Exam Match</div>
+          </div>
+          <div class="barcode">
+            <span style="height:24px"></span><span style="height:14px"></span><span style="height:22px"></span>
+            <span style="height:10px"></span><span style="height:24px"></span><span style="height:18px"></span>
+            <span style="height:12px"></span><span style="height:24px"></span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="photo-box">A</div>
+          <div class="fields">
+            <div class="field">
+              <label class="mono">CLASS / STREAM</label>
+              <div class="val">12th · Science (PCM)</div>
+            </div>
+            <div class="field">
+              <label class="mono">STATE BOARD</label>
+              <div class="val">CBSE</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-matches">
+          <div class="matches-label mono">MATCHED EXAMS (6)</div>
+          <div class="chip-row">
+            <span class="chip">JEE MAIN</span>
+            <span class="chip">JEE ADVANCED</span>
+            <span class="chip">BITSAT</span>
+            <span class="chip">CUET</span>
+            <span class="chip">VITEEE</span>
+            <span class="chip">COMEDK</span>
+          </div>
+        </div>
+        <div class="stamp">ELIGIBLE<br>✓ VERIFIED</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip-wrap">
+    <div class="strip" id="strip"></div>
+  </div>
+
+  <section class="how">
+    <div class="how-head">
+      <h2>Three steps. Two minutes.</h2>
+      <p>No lengthy sign-up forms, no PDFs to dig through. Just tell us who you are, and we'll tell you what you can apply for.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num mono">01</div>
+        <h3>Tell us about your profile</h3>
+        <p>Class, stream, board, marks and category — the same details every exam form asks for anyway.</p>
+      </div>
+      <div class="step">
+        <div class="step-num mono">02</div>
+        <h3>We check the fine print</h3>
+        <p>We run your details against the eligibility rules of every major national exam, updated each admission cycle.</p>
+      </div>
+      <div class="step">
+        <div class="step-num mono">03</div>
+        <h3>Get your matched list</h3>
+        <p>A clean list of exams you qualify for, with deadlines — so you know exactly where to spend your prep time.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer-cta">
+    <div class="fc-inner">
+      <div>
+        <h3>Stop guessing which exams to prep for.</h3>
+        <p>Get your personalized eligibility list in under two minutes.</p>
+      </div>
+      <button class="btn btn-primary">Check my eligibility</button>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 NextStep</span>
+    <span>Made for students navigating India's exam maze</span>
+  </footer>
+
+<script>
+  const exams = ["JEE MAIN","NEET","CUET","CLAT","CAT","UPSC CSE","GATE","NDA","CDS","BITSAT","XAT","VITEEE","SSC CGL","IBPS PO"];
+  const stripEl = document.getElementById('strip');
+  const doubled = [...exams, ...exams];
+  stripEl.innerHTML = doubled.map(e => `<span>${e}</span>`).join('');
+</script>
+</body>
+</html>
