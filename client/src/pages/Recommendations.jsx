@@ -1,55 +1,102 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "./Recommendations.css";
+
+function formatOpeningIn(days) {
+    if (days > 30) {
+        const months = Math.round(days / 30);
+        return `Opening in ~${months} month${months === 1 ? "" : "s"}`;
+    }
+    return `Opening in ${days} day${days === 1 ? "" : "s"}`;
+}
+
+function getUrgencySortKey(exam) {
+    if (exam.status === "Opening Soon") {
+        return exam.openingIn ?? Number.MAX_SAFE_INTEGER;
+    }
+    if (exam.status === "Open") {
+        return 0;
+    }
+    return Number.MAX_SAFE_INTEGER;
+}
 
 function Recommendations() {
-    // backend returns an array
     const [exams, setExams] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-
-        // this fetchRecommendations thing is a standard pattern for fetching data from an API in react.
-
         const fetchRecommendations = async () => {
             try {
                 const response = await api.get("exams/recommend");
-                // console.log(response.data);
+                console.log("recommended exams response : "  , response.data);
                 setExams(response.data.data || []);
             } catch (error) {
-                alert(error.response?.data?.message || "Something went wrong");
+                alert(error.response?.data?.message );
             }
         };
 
         fetchRecommendations();
     }, []);
 
-    console.log(exams);
+    const sortedExams = useMemo(() => {
+        return [...exams].sort((a, b) => {
+            const urgencyDiff = getUrgencySortKey(a) - getUrgencySortKey(b);
+            if (urgencyDiff !== 0) {
+                return urgencyDiff;
+            }
+
+            if (a.status === "Open" && b.status === "Open") {
+                return (a.closingIn ?? Number.MAX_SAFE_INTEGER) - (b.closingIn ?? Number.MAX_SAFE_INTEGER);
+            }
+
+            return a.name.localeCompare(b.name);
+        });
+    }, [exams]);
 
     return (
-        <div>
+        <div className="recommendations-page">
             <h1>Recommended Exams</h1>
-            {
-                exams.map((exam) => (
-                    <div key = {exam._id}>
-                        <h2>{exam.name}</h2>
-                        <p>{exam.status}</p>
+            <div className="recommendations-list">
+                {sortedExams.map((exam) => (
+                    <article key={exam._id} className="exam-card">
+                        <div className="exam-card__header">
+                            <h2 className="exam-card__title">{exam.name}</h2>
+                            <button
+                                type="button"
+                                className="exam-card__details-btn"
+                                onClick={() => navigate(`/exams/${exam._id}`)}
+                            >
+                                View Details
+                            </button>
+                        </div>
 
-                        {exam.status === "Opening Soon" && (<p>Opens in {exam.openingIn} days</p>
-                        )}
+                        <div className="exam-card__meta">
+                            {exam.status === "Open" && (
+                                <>
+                                    <span className="exam-card__status">Open</span>
+                                    <span className="exam-card__meta-divider" aria-hidden="true">·</span>
+                                    <span className="exam-card__timing">
+                                        Closes in {exam.closingIn} day{exam.closingIn === 1 ? "" : "s"}
+                                    </span>
+                                </>
+                            )}
 
-                        {exam.status === "Open" && (<p>Closes in {exam.closingIn} days</p>)}
+                            {exam.status === "Opening Soon" && (
+                                <span className="exam-card__timing">
+                                    {formatOpeningIn(exam.openingIn)}
+                                </span>
+                            )}
 
-                        <button onClick={() => navigate(`/exams/${exam._id}`)}>View Details</button>
-                    </div>
-                ))
-            }
+                            {exam.status === "Closed" && (
+                                <span className="exam-card__status">Closed</span>
+                            )}
+                        </div>
+                    </article>
+                ))}
+            </div>
         </div>
-    )
+    );
 }
 
 export default Recommendations;
-
-// unlike the codes of login signup , where we had written e for event here , we haven't written it , why?
-// because in our useEffect we aren't waiting for a user to do anything , instead the code is designed in a way that it runs after the component has been mounted (rendered) for the first time, which is what the empty dependency array [] does , in the end.
-// since there's no longer an interaction that triggers this function, there's is no event to capture , so no e is needed.
