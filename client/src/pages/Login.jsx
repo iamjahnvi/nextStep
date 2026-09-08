@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import PasswordInput from "../components/PasswordInput";
@@ -118,6 +118,21 @@ function PromoBackground() {
 // -----------------------------------------------------------------------------
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+// -----------------------------------------------------------------------------
+// GOOGLE OAUTH — "Continue with Google"
+// HOW: 1) We fetch the OAuth client ID from our own backend (/auth/google/config)
+//         so it lives ONLY on the server.
+//      2) We dynamically load Google's official Identity Services script.
+//      3) We initialise GIS with the client ID; clicking the button calls
+//         google.accounts.id.prompt(), which opens Google's account chooser.
+//      4) Google returns a signed ID token (credential) → we POST it to OUR
+//         backend /auth/google, where the token is cryptographically VERIFIED,
+//         the user is registered/logged-in, and our own JWT is returned.
+// WHY:  Backend verification (never trusting the browser) is the secure OAuth
+//   pattern, and it works for both signup and login in one click.
+// -----------------------------------------------------------------------------
+const GOOGLE_SCRIPT_SRC = "https://accounts.google.com/gsi/client";
+
 function Login() {
     const navigate = useNavigate();
     const [rememberMe, setRememberMe] = useState(false);
@@ -129,6 +144,11 @@ function Login() {
         email: "",
         _form: "",
     });
+
+    // Google OAuth state
+    const [googleReady, setGoogleReady] = useState(false);
+    const [googleBusy, setGoogleBusy] = useState(false);
+    const gisInitializedRef = useRef(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -145,6 +165,96 @@ function Login() {
             setErrors((prev) => ({ ...prev, email: error }));
         }
     };
+
+    // Handle the token Google hands back after the account chooser.
+    // HOW: send the raw credential to our server; on success store our JWT and
+    //   go to the profile page (new users need to fill their profile first).
+    const handleGoogleResponse = async (response) => {
+        try {
+            setGoogleBusy(true);
+            const res = await api.post("/auth/google", {
+                credential: response.credential,
+            });
+            if (res.data.success) {
+                localStorage.setItem("token", res.data.token);
+                navigate("/profile");
+            }
+        } catch (error) {
+            setErrors((prev) => ({
+                ...prev,
+                _form: error.response?.data?.message || "Google sign-in failed. Please try again.",
+            }));
+        } finally {
+            setGoogleBusy(false);
+        }
+    };
+
+    const handleGoogleClick = () => {
+        if (!googleReady || googleBusy) return;
+        setErrors((prev) => ({ ...prev, _form: "" }));
+        try {
+            // prompt() is called inside the user gesture (the click) so Google
+            // shows the account chooser / One Tap popup.
+            window.google?.accounts?.id?.prompt();
+        } catch {
+            setErrors((prev) => ({
+                ...prev,
+                _form: "Could not open Google sign-in. Make sure popups are allowed.",
+            }));
+        }
+    };
+
+    // On mount: fetch client id, load GIS script, then initialise.
+    useEffect(() => {
+        let cancelled = false;
+
+        const setupGoogle = async () => {
+            try {
+                const configRes = await api.get("/auth/google/config");
+                const clientId = configRes.data?.clientId;
+                if (!clientId || clientId.includes("your_client_id_here")) {
+                    if (!cancelled) {
+                        setErrors((prev) => ({
+                            ...prev,
+                            _form: "Google sign-in is not configured yet (GOOGLE_CLIENT_ID missing on the server).",
+                        }));
+                    }
+                    return;
+                }
+
+                if (document.getElementById("gsi-client-script")) return;
+                const script = document.createElement("script");
+                script.id = "gsi-client-script";
+                script.src = GOOGLE_SCRIPT_SRC;
+                script.async = true;
+                script.onload = () => {
+                    if (cancelled || gisInitializedRef.current) return;
+                    window.google?.accounts?.id?.initialize({
+                        client_id: clientId,
+                        callback: handleGoogleResponse,
+                        auto_select: false,
+                    });
+                    gisInitializedRef.current = true;
+                    if (!cancelled) setGoogleReady(true);
+                };
+                document.body.appendChild(script);
+            } catch {
+                if (!cancelled) {
+                    setErrors((prev) => ({
+                        ...prev,
+                        _form: "Could not set up Google sign-in. Please try again.",
+                    }));
+                }
+            }
+        };
+
+        setupGoogle();
+
+        return () => {
+            cancelled = true;
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -211,9 +321,15 @@ function Login() {
                             </button>
                         </p>
 
-                        <button type="button" className="login-oauth-btn" disabled>
+                        <button
+                            type="button"
+                            className="login-oauth-btn"
+                            onClick={handleGoogleClick}
+                            disabled={googleBusy}
+                            aria-disabled={!googleReady}
+                        >
                             <GoogleIcon />
-                            Continue with Google
+                            {googleBusy ? "Signing in…" : "Continue with Google"}
                         </button>
 
                         <div className="login-divider">

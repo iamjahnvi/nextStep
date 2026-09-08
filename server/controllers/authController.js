@@ -2,7 +2,17 @@ const User = require("../models/User");
 
 const bcrypt = require("bcrypt");
 
+const crypto = require("crypto");
+
 const generateToken = require("../utils/generateToken");
+
+// google-auth-library: official Google library used to VERIFY the ID token
+// (JWT) that the frontend receives from Google's Identity Services. Verifying
+// cryptographically on the server is mandatory — we trust Google's signature,
+// never the browser.
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const {
     validateEmail,
@@ -225,6 +235,106 @@ const login = async (req,res) => {
 
     };
 }
+
+// -----------------------------------------------------------------------------
+// getGoogleConfig
+// HOW: Returns the OAuth Client ID to the frontend so it can initialise Google
+//   Identity Services. WHY: single source of truth — the client ID is only
+//   stored in the server .env, never hard-coded in the frontend bundle.
+// -----------------------------------------------------------------------------
+const getGoogleConfig = async (req , res) => {
+    try{
+        return res.status(200).json({
+            success : true ,
+            clientId : process.env.GOOGLE_CLIENT_ID || "",
+        });
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success : false ,
+            message : "Internal server error" ,
+        });
+    }
+};
+
+// -----------------------------------------------------------------------------
+// googleAuth ("Continue with Google" / "Sign in with Google")
+// HOW:  1. The frontend completes Google's account chooser and hands us an ID
+//          token (a signed JWT) in req.body.credential.
+//       2. googleClient.verifyIdToken() validates the token's signature, issuer,
+//          audience and expiry against Google's public keys.
+//       3. We trust the verified payload (email, name, picture) and either log
+//          the user in (email exists) or create a brand-new account (email not
+//          in DB). For OAuth-only users we generate a cryptographically-random
+//          password, since they won't log in with a password.
+//       4. A normal JWT for our own API is issued and returned.
+// WHY:  This is the secure OAuth pattern — the server verifies the token instead
+//   of trusting anything sent from the browser, and it auto-registers users, so
+//   "Continue with Google" works as both signup and login.
+// -----------------------------------------------------------------------------
+const googleAuth = async (req , res) => {
+    try{
+        const { credential } = req.body;
+        if(!credential){
+            return res.status(400).json({
+                success : false ,
+                message : "Google credential is missing.",
+            });
+        }
+
+        // cryptographic verification of Google's ID token
+        const ticket = await googleClient.verifyIdToken({
+            idToken : credential ,
+            audience : process.env.GOOGLE_CLIENT_ID ,
+        });
+        const payload = ticket.getPayload();
+
+        const { email , email_verified , name , picture } = payload;
+
+        // Google only issues tokens for verified emails; double-check anyway.
+        if(!email || !email_verified){
+            return res.status(401).json({
+                success : false ,
+                message : "Google account email is not verified.",
+            });
+        }
+
+        let user = await User.findOne({ email });
+
+        if(!user){
+            // first time -> auto register (signup via Google)
+            const randomPassword = crypto.randomBytes(32).toString("hex");
+            const hashedPassword = await bcrypt.hash(randomPassword, 10);
+            user = await User.create({
+                name : name || email.split("@")[0] ,
+                email ,
+                password : hashedPassword ,
+                googleId : payload.sub ,
+                avatar : picture ,
+            });
+        } else {
+            // existing user -> just log in (and refresh their stored googleId/avatar)
+            if(payload.sub && !user.googleId) user.googleId = payload.sub;
+            if(picture && !user.avatar) user.avatar = picture;
+            await user.save();
+        }
+
+        const token = generateToken(user._id);
+
+        return res.status(200).json({
+            success : true ,
+            message : "Google sign-in successful" ,
+            token ,
+            user : { id : user._id , name : user.name , email : user.email } ,
+        });
+    } catch(error){
+        console.log(error);
+        return res.status(401).json({
+            success : false ,
+            message : "Google authentication failed. Please try again.",
+        });
+    }
+}
 const updateProfile = async(req , res) => {
     console.log("body recieved");
     console.log(req.body);
@@ -308,5 +418,7 @@ module.exports = {
     login , 
     getMe ,
     updateProfile ,
+    getGoogleConfig ,
+    googleAuth ,
 };
 

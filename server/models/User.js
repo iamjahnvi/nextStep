@@ -22,6 +22,16 @@ const userSchema = new mongoose.Schema({
         minlength : 0,
     } ,
 
+    // Google OAuth fields — only set when the user signs in via Google.
+    // googleId: Google's unique ID for the account (audience/obfuscated sub).
+    // avatar: profile picture URL returned by Google.
+    googleId : {
+        type : String ,
+    },
+    avatar : {
+        type : String ,
+    },
+
     // point to be noted is that password never stores the plain text password written by us, it stores the value of it , after hashing.
     // name , email and password are authentication information
 
