@@ -405,3 +405,28 @@
     max-width: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Inline validation error styles (Login)
+   HOW: .login-field__error shows a small red message under the email field;
+     .login-form-error is a general banner for form/server-level errors.
+   WHY: Replaces the old alert() popups with visible, accessible in-form errors.
+--------------------------------------------------------------------------- */
+.login-field__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #b3261e;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.login-form-error {
+  background: #fdecea;
+  border: 1px solid #f5b3ab;
+  color: #a33b30;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+}

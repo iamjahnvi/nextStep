@@ -23,6 +23,7 @@ function getUrgencySortKey(exam) {
 
 function Recommendations() {
     const [exams, setExams] = useState([]);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,7 +33,8 @@ function Recommendations() {
                 console.log("recommended exams response : "  , response.data);
                 setExams(response.data.data || []);
             } catch (error) {
-                alert(error.response?.data?.message );
+                // WHY: removed the original alert() popup; show an inline error instead.
+                setError(error.response?.data?.message || "Failed to load recommendations.");
             }
         };
 
@@ -57,6 +59,7 @@ function Recommendations() {
     return (
         <div className="recommendations-page">
             <h1>Recommended Exams</h1>
+            {error && <p className="recommendations-list__error">{error}</p>}
             <div className="recommendations-list">
                 {sortedExams.map((exam) => (
                     <article key={exam._id} className="exam-card">

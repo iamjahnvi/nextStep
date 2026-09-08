@@ -16,6 +16,7 @@ function ExamDetails() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [exam, setExam] = useState(null);
+    const [error, setError] = useState("");
 
     const getRegistrationStatus = (start, end) => {
         const today = new Date();
@@ -33,7 +34,8 @@ function ExamDetails() {
                     setExam(response.data.data);
                 }
             } catch (error) {
-                alert(error.response?.data?.message || error);
+                // WHY: removed the original alert() popup; show an inline error instead.
+                setError(error.response?.data?.message || "Failed to load exam details.");
             }
         };
 
@@ -41,7 +43,12 @@ function ExamDetails() {
     }, [id]);
 
     if (!exam) {
-        return <h2>Loading...</h2>;
+        return (
+            <div>
+                {error && <p style={{ color: "#b3261e" }}>{error}</p>}
+                <h2>Loading...</h2>
+            </div>
+        );
     }
 
     return (

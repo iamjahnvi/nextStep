@@ -391,6 +391,27 @@ form {
   text-align: left;
 }
 
+/* Inline validation error styles (Profile)
+   HOW: .profile-field__error shows a red message under an invalid field;
+     .profile-form-error is a general banner for server-level errors.
+   WHY: Replaces the old alert() popups with visible, accessible in-form errors. */
+
+.profile-field__error {
+  margin: calc(-1 * var(--space-2)) 0 var(--space-3);
+  font-size: var(--text-sm);
+  color: #b3261e;
+}
+
+.profile-form-error {
+  background: #fdecea;
+  border: 1px solid #f5b3ab;
+  color: #a33b30;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-4);
+}
+
 /* Password field with visibility toggle */
 
 .password-field {

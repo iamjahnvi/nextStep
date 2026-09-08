@@ -111,6 +111,13 @@ function PromoBackground() {
     );
 }
 
+// -----------------------------------------------------------------------------
+// CLIENT-SIDE EMAIL VALIDATION (login)
+// HOW: The same regex used in Signup flags a malformed email before the request
+//   is sent. WHY: gives instant feedback so users notice a typo immediately.
+// -----------------------------------------------------------------------------
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 function Login() {
     const navigate = useNavigate();
     const [rememberMe, setRememberMe] = useState(false);
@@ -118,26 +125,63 @@ function Login() {
         email: "",
         password: "",
     });
+    const [errors, setErrors] = useState({
+        email: "",
+        _form: "",
+    });
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
+        // live email validation while typing
+        if (e.target.name === "email") {
+            const value = e.target.value;
+            let error = "";
+            if (value && !EMAIL_REGEX.test(value.trim())) {
+                error = "Please enter a valid email address (e.g. you@example.com).";
+            }
+            setErrors((prev) => ({ ...prev, email: error }));
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // ---------------------------------------------------------------------
+        // Validate email format before sending to the server.
+        // WHY: surface an invalid email early instead of relying on the generic
+        //   "Invalid email or password" from the backend.
+        // ---------------------------------------------------------------------
+        const nextErrors = { email: "", _form: "" };
+        if (!formData.email.trim()) {
+            nextErrors.email = "Email is required.";
+        } else if (!EMAIL_REGEX.test(formData.email.trim())) {
+            nextErrors.email = "Please enter a valid email address (e.g. you@example.com).";
+        }
+        if (!formData.password) {
+            nextErrors._form = "Please enter your password.";
+        }
+        setErrors(nextErrors);
+        if (nextErrors.email || nextErrors._form) {
+            return;
+        }
 
         try {
             const response = await api.post("/auth/login", formData);
             if (response.data.success) {
                 localStorage.setItem("token", response.data.token);
             }
-            alert(response.data.message);
+            // WHY: removed the original alert() success popup; we navigate to the
+            //   profile page directly to indicate a successful login.
             navigate("/profile");
         } catch (error) {
-            alert(error.response?.data?.message);
+            // WHY: replaced alert() with an inline error banner for clarity/UX.
+            setErrors((prev) => ({
+                ...prev,
+                _form: error.response?.data?.message || "Login failed. Please try again.",
+            }));
         }
     };
 
@@ -177,6 +221,10 @@ function Login() {
                         </div>
 
                         <form onSubmit={handleSubmit} autoComplete="off">
+                            {errors._form && (
+                                <div className="login-form-error">{errors._form}</div>
+                            )}
+
                             <div className="login-field">
                                 <label className="login-mono" htmlFor="email">
                                     Email address
@@ -191,6 +239,9 @@ function Login() {
                                     autoComplete="off"
                                     required
                                 />
+                                {errors.email && (
+                                    <p className="login-field__error">{errors.email}</p>
+                                )}
                             </div>
 
                             <div className="login-field">

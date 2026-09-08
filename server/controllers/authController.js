@@ -4,6 +4,13 @@ const bcrypt = require("bcrypt");
 
 const generateToken = require("../utils/generateToken");
 
+const {
+    validateEmail,
+    validatePassword,
+    validateName,
+    validatePercentage,
+} = require("../utils/validation");
+
 const signup = async (req , res) => {
     // res.status(201).json({
     //     success : true,
@@ -31,6 +38,51 @@ const signup = async (req , res) => {
                 success : false , 
                 message :  "Passwords don't match"
             })
+        }
+
+        // ---------------------------------------------------------------------
+        // Email format validation (server-side)
+        // HOW: validateEmail() runs a regex against the submitted email and
+        //   rejects it if it is not a properly structured address.
+        // WHY: Prevents malformed email addresses (e.g. "abc@", "user@.com")
+        //   from being created in the database.
+        // ---------------------------------------------------------------------
+        const emailCheck = validateEmail(email);
+        if(!emailCheck.valid){
+            return res.status(400).json({
+                success : false ,
+                errors : { email : emailCheck.message },
+            });
+        }
+
+        // ---------------------------------------------------------------------
+        // Password strength validation (server-side)
+        // HOW: validatePassword() enforces production-grade rules: min 8 chars,
+        //   at least one letter, one number, and one special character.
+        // WHY: Weak passwords are the #1 security risk. Enforcing this on the
+        //   server means the rule cannot be bypassed from the browser.
+        // ---------------------------------------------------------------------
+        const passwordCheck = validatePassword(password);
+        if(!passwordCheck.valid){
+            return res.status(400).json({
+                success : false ,
+                errors : { password : passwordCheck.message },
+            });
+        }
+
+        // ---------------------------------------------------------------------
+        // Name validation (server-side)
+        // HOW: validateName() ensures the name contains only letters (plus
+        //   spaces/hyphens/apostrophes for real compound names).
+        // WHY: Flags users who enter numbers or special symbols as their name,
+        //   keeping the database clean and the profile display sane.
+        // ---------------------------------------------------------------------
+        const nameCheck = validateName(name);
+        if(!nameCheck.valid){
+            return res.status(400).json({
+                success : false ,
+                errors : { name : nameCheck.message },
+            });
         }
 
         const existingUser = await User.findOne({email});
@@ -109,6 +161,22 @@ const login = async (req,res) => {
                 success : false ,
                 message : "All fields are required"
             })
+        }
+
+        // ---------------------------------------------------------------------
+        // Email format validation on LOGIN flow (server-side)
+        // HOW: Same validateEmail() regex used in signup is applied here, so the
+        //   login form also flags an incorrectly-typed email before we even look
+        //   the user up in the database.
+        // WHY: Gives the user immediate, clear feedback at the very first point
+        //   of entry rather than hiding behind a generic "invalid credentials".
+        // ---------------------------------------------------------------------
+        const emailCheck = validateEmail(email);
+        if(!emailCheck.valid){
+            return res.status(400).json({
+                success : false ,
+                errors : { email : emailCheck.message },
+            });
         }
 
         const user = await User.findOne({email});
@@ -190,6 +258,20 @@ const updateProfile = async(req , res) => {
         }
 
         if(percentage!==undefined){
+            // -----------------------------------------------------------------
+            // Percentage validation (server-side)
+            // HOW: validatePercentage() blocks negative values (and values > 100).
+            // WHY: A negative percentage is impossible in reality; accepting it
+            //   would corrupt the profile and skew the exam recommendation query
+            //   that compares user percentage against exam minimums.
+            // -----------------------------------------------------------------
+            const percentageCheck = validatePercentage(Number(percentage));
+            if(!percentageCheck.valid){
+                return res.status(400).json({
+                    success : false ,
+                    errors : { percentage : percentageCheck.message },
+                });
+            }
             req.user.profile.percentage = percentage;
         }
 

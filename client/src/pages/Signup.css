@@ -431,3 +431,27 @@
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Inline validation error styles (Signup)
+   HOW: .signup-field__error shows a small red message under an invalid field;
+     .signup-form-error is a general banner for server-level errors.
+   WHY: Replaces the old alert() popups with visible, accessible in-form errors.
+--------------------------------------------------------------------------- */
+.signup-field__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #b3261e;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.signup-form-error {
+  background: #fdecea;
+  border: 1px solid #f5b3ab;
+  color: #a33b30;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Space Grotesk', sans-serif;
+}
