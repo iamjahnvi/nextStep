@@ -267,8 +267,8 @@ function MainDashboard() {
                 )}
 
                 {/* Quick-access categories */}
-                <div className="quick-categories" style={{ margin: var(--space-8) 0 var(--space-6) }}>
-                    <h3 className="quick-categories__title" style={{ margin: 0 0 var(--space-4), fontSize: var(--text-xl) }}>Quick Access</h3>
+                <div className="quick-categories">
+                    <h3 className="quick-categories__title">Quick Access</h3>
                     <div className="quick-categories__grid">
                         <span className="quick-category">Engineering</span>
                         <span className="quick-category">Medical</span>
