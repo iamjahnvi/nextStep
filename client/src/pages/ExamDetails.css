@@ -1,0 +1,296 @@
+.exam-details-page {
+  min-height: 100svh;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.exam-details-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+}
+
+@media (max-width: 1024px) {
+  .exam-details-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+}
+
+.exam-details-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.profile-sidebar {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-md);
+}
+
+.profile-sidebar__image {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--space-4);
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-inverse);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.profile-sidebar__image .profile-sidebar__initial {
+  font-size: 24px;
+}
+
+.profile-sidebar__info {
+  text-align: center;
+}
+
+.profile-sidebar__name {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 var(--space-1);
+}
+
+.profile-sidebar__email {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.profile-sidebar__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.profile-sidebar__filter {
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.profile-sidebar__filter:hover {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.exam-details-right {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+}
+
+.exam-header {
+  margin: 0 0 var(--space-6);
+}
+
+.exam-header__name {
+  font-size: var(--text-3xl);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-tight);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--space-2);
+}
+
+.exam-header__fullform {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.exam-eligibility {
+  margin: 0 0 var(--space-6);
+}
+
+.exam-eligibility__title {
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text);
+  margin: 0 0 var(--space-4);
+}
+
+.exam-eligibility__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .exam-eligibility__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exam-eligibility__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.exam-eligibility__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.exam-eligibility__value {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.exam-registration {
+  margin: 0 0 var(--space-6);
+}
+
+.exam-registration__title {
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text);
+  margin: 0 0 var(--space-4);
+}
+
+.exam-registration__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .exam-registration__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exam-registration__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.exam-registration__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.exam-registration__value {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.exam-registration__status {
+  margin: var(--space-4) 0 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.exam-registration__status-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.exam-registration__status-value {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.exam-actions {
+  margin: var(--space-6) 0 0;
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.exam-actions__website {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.exam-actions__website:hover {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.exam-actions__website:hover svg path {
+  stroke: var(--color-text-inverse);
+}
+
+.exam-actions__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-5);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.exam-actions__back:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.exam-actions__back:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.sidebar__filter {
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.sidebar__filter:hover {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
